@@ -1,0 +1,35 @@
+{
+  "name": "ai-rag-quality-ops",
+  "version": "1.0.0",
+  "description": "Production-grade RAG evaluation, retrieval benchmarking, citation verification, stale knowledge detection, and reviewed documentation operations platform.",
+  "private": true,
+  "scripts": {
+    "build:backend": "npm --prefix backend run build",
+    "build:frontend": "npm --prefix frontend run build",
+    "build": "npm --prefix backend run build && npm --prefix frontend run build",
+    "test:backend": "npm --prefix backend test",
+    "test:frontend": "npm --prefix frontend test",
+    "test": "npm --prefix backend test && npm --prefix frontend test",
+    "lint:backend": "npm --prefix backend run lint",
+    "lint:frontend": "npm --prefix frontend run lint",
+    "lint": "npm --prefix backend run lint && npm --prefix frontend run lint",
+    "start:backend": "npm --prefix backend run start:dev",
+    "start:frontend": "npm --prefix frontend run dev"
+  },
+  "keywords": [
+    "rag-evaluation",
+    "retrieval-benchmark",
+    "ndcg",
+    "mrr",
+    "recall-at-k",
+    "groundedness",
+    "citation-verification",
+    "knowledge-ops",
+    "freshness-detection",
+    "model-regression",
+    "nestjs",
+    "nextjs"
+  ],
+  "author": "Rishank Kesarwani",
+  "license": "UNLICENSED"
+}

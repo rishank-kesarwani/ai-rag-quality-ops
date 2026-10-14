@@ -1,0 +1,4 @@
+# Ignore backend and root artifacts from Vercel frontend builds
+backend/
+dist/
+*.log
