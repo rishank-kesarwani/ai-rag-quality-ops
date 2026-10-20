@@ -33,7 +33,7 @@ export function Navigation() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo & Brand */}
-          <Link href="/" className="flex items-center gap-2.5 sm:gap-3 group">
+          <Link href="/" className="shrink-0 flex items-center gap-2.5 sm:gap-3 group mr-2 sm:mr-4">
             <div className="relative h-9 w-9 shrink-0 group-hover:scale-105 transition-transform flex items-center justify-center">
               <Image
                 src="/logo.svg"
@@ -42,14 +42,15 @@ export function Navigation() {
                 height={36}
                 className="h-9 w-9 drop-shadow-[0_0_10px_rgba(99,102,241,0.4)]"
                 priority
+                unoptimized
               />
             </div>
-            <div>
+            <div className="min-w-0">
               <div className="flex items-center gap-1.5 sm:gap-2">
-                <span className="font-bold text-sm sm:text-base tracking-tight text-white">
+                <span className="font-bold text-sm sm:text-base tracking-tight text-white shrink-0">
                   RAG Quality Ops
                 </span>
-                <span className="hidden xs:inline-block text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+                <span className="hidden xs:inline-block text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 shrink-0">
                   Reliability
                 </span>
               </div>
@@ -60,7 +61,7 @@ export function Navigation() {
           </Link>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden md:flex items-center gap-1">
+          <nav className="hidden lg:flex items-center gap-1 shrink-0">
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive =
@@ -72,21 +73,21 @@ export function Navigation() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                  className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium transition-all shrink-0 ${
                     isActive
                       ? 'bg-indigo-600/15 text-indigo-300 border border-indigo-500/30 shadow-sm'
                       : 'text-gray-400 hover:text-gray-200 hover:bg-card/60'
                   }`}
                 >
-                  <Icon className={`h-4 w-4 ${isActive ? 'text-indigo-400' : 'text-gray-400'}`} />
-                  {item.label}
+                  <Icon className={`h-4 w-4 shrink-0 ${isActive ? 'text-indigo-400' : 'text-gray-400'}`} />
+                  <span>{item.label}</span>
                 </Link>
               );
             })}
           </nav>
 
           {/* Right Header Area: Tenant Badge & Mobile Hamburger */}
-          <div className="flex items-center gap-2 sm:gap-3">
+          <div className="flex items-center gap-2 sm:gap-3 shrink-0 ml-auto">
             <div className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-2.5 py-1 rounded-md bg-card border border-border text-[11px] text-gray-300">
               <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
               <span className="hidden sm:inline text-gray-400">Tenant:</span>
@@ -99,7 +100,7 @@ export function Navigation() {
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-label="Toggle mobile navigation menu"
-              className="md:hidden p-2 rounded-lg bg-card border border-border text-gray-300 hover:text-white hover:bg-card/80 transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
+              className="lg:hidden p-2 rounded-lg bg-card border border-border text-gray-300 hover:text-white hover:bg-card/80 transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
             >
               {mobileMenuOpen ? (
                 <X className="h-5 w-5 text-indigo-400" />
@@ -113,7 +114,7 @@ export function Navigation() {
 
       {/* Mobile Drawer / Dropdown Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-b border-border/80 bg-background/95 backdrop-blur-xl px-4 pt-2 pb-4 space-y-1 shadow-2xl animate-in slide-in-from-top-2 duration-200">
+        <div className="lg:hidden border-b border-border/80 bg-background/95 backdrop-blur-xl px-4 pt-2 pb-4 space-y-1 shadow-2xl animate-in slide-in-from-top-2 duration-200">
           <div className="text-[10px] font-semibold uppercase tracking-wider text-gray-400 px-3 py-1.5">
             Platform Navigation
           </div>
