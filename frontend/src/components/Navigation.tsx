@@ -13,11 +13,13 @@ import {
   Server,
   Menu,
   X,
+  Shield,
 } from 'lucide-react';
 
 export function Navigation() {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [imgError, setImgError] = useState(false);
 
   const navItems = [
     { label: 'Overview', href: '/', icon: LayoutDashboard },
@@ -35,15 +37,22 @@ export function Navigation() {
           {/* Logo & Brand */}
           <Link href="/" className="shrink-0 flex items-center gap-2.5 sm:gap-3 group mr-2 sm:mr-4">
             <div className="relative h-9 w-9 shrink-0 group-hover:scale-105 transition-transform flex items-center justify-center">
-              <Image
-                src="/logo.svg"
-                alt="AI RAG Quality Ops Logo"
-                width={36}
-                height={36}
-                className="h-9 w-9 drop-shadow-[0_0_10px_rgba(99,102,241,0.4)]"
-                priority
-                unoptimized
-              />
+              {imgError ? (
+                <div className="h-9 w-9 rounded-lg bg-indigo-950/80 border border-indigo-500/40 flex items-center justify-center shadow-lg shadow-indigo-500/20">
+                  <Shield className="h-5 w-5 text-indigo-400" />
+                </div>
+              ) : (
+                <Image
+                  src="/logo.svg"
+                  alt="AI RAG Quality Ops Logo"
+                  width={36}
+                  height={36}
+                  className="h-9 w-9 drop-shadow-[0_0_10px_rgba(99,102,241,0.4)]"
+                  priority
+                  unoptimized
+                  onError={() => setImgError(true)}
+                />
+              )}
             </div>
             <div className="min-w-0">
               <div className="flex items-center gap-1.5 sm:gap-2">

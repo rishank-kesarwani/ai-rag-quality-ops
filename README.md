@@ -241,3 +241,39 @@ curl -s -X POST http://localhost:4000/api/v1/sources/check-all
 | **11** | Integration Timeout & Fallbacks | `integrations.spec.ts` | **PASSED** (bounded timeouts, deterministic fallbacks) |
 | **12** | Tenant Isolation & SSRF Tests | `tenant-isolation.spec.ts` & `ssrf-validator.spec.ts` | **PASSED** (private IP/metadata blocked, tenant isolation verified) |
 | **13** | Documented Local Smoke Test | Exact curl commands executed live | **PASSED** (all endpoints verified live) |
+| **14** | Image Optimization Config Tests | `npm --prefix frontend test` (`image-config.spec.ts`) | **PASSED** (WebP enforcement, 31-day TTL, pruned size variants) |
+
+---
+
+## 7. Vercel Image Optimization & Asset Delivery Strategy
+
+To operate strictly within Vercel's included monthly allowance (5,000 transformations) and avoid overage charges, this repository enforces a lean, deterministic asset delivery model.
+
+### Image Audit Summary
+- **App Type**: Next.js 14 App Router.
+- **Image Usages**:
+  - `Navigation.tsx`: Brand logo (`/logo.svg`, 36x36 vector icon).
+  - `layout.tsx`: Favicon (`/favicon.svg`) and Apple touch icon (`/logo.svg`).
+  - Page Icons: Inline SVG components via `lucide-react` (`Database`, `BarChart3`, etc.).
+- **Remote Providers**: None. Datasets and evaluation runs are purely textual and structured JSON.
+
+### Optimization Rules Applied
+1. **Component-Level Selective Bypassing (`unoptimized`)**:
+   - The brand logo in `<Navigation />` sets `unoptimized`.
+   - **Why**: SVGs are vector graphics that scale mathematically. Routing them through `/_next/image` converts them into raster bitmaps and burns monthly transformations with zero compression benefit.
+   - Bypassing serves `/logo.svg` directly from Vercel's Global Edge Network (CDN) with zero transformation consumption.
+   - Preserves `<Image>` width, height, aspect ratio, priority preloading, and accessibility `alt` text.
+2. **Resilience Against Transformation Failures**:
+   - Includes an inline `<Shield />` vector fallback (`onError`) to ensure the navbar never renders an empty or broken box if edge assets fail to load.
+3. **Optimized Next.js Configuration (`frontend/next.config.js`)**:
+   - **Single Output Format**: `formats: ['image/webp']` prevents Next.js from generating duplicate AVIF + WebP permutations for any future raster assets.
+   - **Pruned Width Variants**: Restricts `deviceSizes` to `[640, 750, 1080, 1200, 1920]` and `imageSizes` to `[32, 48, 64, 96, 128, 256]` (down from the 16 Next.js default sizes), preventing excessive dimension variants.
+   - **Extended Cache TTL**: Configures `minimumCacheTTL: 2678400` (31 days) to prevent Vercel from re-transforming identical assets every 60 seconds (the Next.js default).
+   - **Restricted Remote Patterns**: `remotePatterns: []` blocks arbitrary remote domains from triggering unauthorized image transformations.
+
+### Guidelines for Adding New Visual Assets
+- **SVGs, Small Icons & Logos (<64px)**: Always add `unoptimized` to `<Image>` or render as inline SVG components.
+- **Project Thumbnails / Cards**: Pre-optimize locally as `.webp` at exact rendered dimensions (e.g. 384x216) and serve from `public/` with `unoptimized` if dimensions are fixed.
+- **Large Photography / Banners**: Use Next.js `<Image>` with explicit `sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"` so the optimizer only generates necessary variants.
+- **Verification**: Inspect network requests in DevTools to ensure static assets return `Content-Type: image/svg+xml` or `image/webp` directly from static routes without hitting `/_next/image?url=...`.
+
